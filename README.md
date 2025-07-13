@@ -1,13 +1,10 @@
-# Adventure Works Analytics - Data Models
+# Adventure Works Analytics - Orchestration
 
-## Modelos dbt implementados:
-- Camada staging: Limpeza e padronização
-- Camada intermediate: Transformações complexas  
-- Camada marts: Modelos finais de negócio
+## Orquestração completa implementada:
+- Pipeline Airflow com DAGs configuradas
+- Workflows Databricks integrados
+- Containerização Docker
+- Agendamento diário automático
+- Tratamento de erros e retentativas
 
-## Testes de qualidade:
-- 93 testes totais (8 singulares + 85 genéricos)
-- Validação de integridade de dados
-- Regras de negócio implementadas
-
-Parte da Feature 2 - Data Models
+Parte da Feature 3 - Orchestration
