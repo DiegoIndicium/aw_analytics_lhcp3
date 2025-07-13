@@ -43,3 +43,6 @@ backup_working/
 *.csv
 *.parquet
 data/raw/
+# Environment variables
+.env
+.env.*
