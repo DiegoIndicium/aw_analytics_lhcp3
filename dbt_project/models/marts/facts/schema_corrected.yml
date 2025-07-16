@@ -1,0 +1,88 @@
+version: 2
+
+models:
+  - name: fact_sales_corrected
+    description: "Sales fact table with comprehensive quality metrics"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "data_quality_score >= 0 AND data_quality_score <= 100"
+          config:
+            severity: warn
+    columns:
+      - name: orderdetail_sk
+        description: "Surrogate key for order detail"
+        tests:
+          - not_null
+          - unique
+          
+      - name: sales_order_id
+        description: "Order ID"
+        tests:
+          - not_null
+          
+      - name: product_id
+        description: "Product ID"
+        tests:
+          - not_null
+          
+      - name: customer_id
+        description: "Customer ID"
+        tests:
+          - not_null
+          
+      - name: order_date
+        description: "Order date"
+        tests:
+          - not_null
+          
+      - name: net_amount
+        description: "Net amount"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1000000
+              
+      - name: estimated_profit
+        description: "Estimated profit"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1000000
+              
+      - name: data_quality_score
+        description: "Data quality score (0-100)"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+              
+      - name: on_time_delivery
+        description: "On time delivery flag"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              
+      - name: has_discount
+        description: "Has discount flag"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              
+      - name: is_shipped
+        description: "Is shipped flag"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              
+      - name: is_cancelled
+        description: "Is cancelled flag"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]

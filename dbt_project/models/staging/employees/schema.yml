@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: stg_employees
+    description: "Dados de funcionários com transformações básicas"
+    columns:
+      - name: employee_sk
+        description: "Chave surrogada para o funcionário"
+        tests:
+          - unique
+          - not_null
+      - name: business_entity_id
+        description: "ID da entidade de negócio"
+        tests:
+          - unique
+          - not_null
+      - name: national_id_number
+        description: "Número de identificação nacional"
+        tests:
+          - not_null
+      - name: login_id
+        description: "ID de login"
+        tests:
+          - not_null
+      - name: organization_level
+        description: "Nível organizacional"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 1"
+      - name: job_title
+        description: "Cargo do funcionário"
+        tests:
+          - not_null
+      - name: birth_date
+        description: "Data de nascimento"
+        tests:
+          - not_null
+      - name: marital_status
+        description: "Estado civil"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['M', 'S']
+      - name: gender
+        description: "Gênero"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['M', 'F']
+      - name: hire_date
+        description: "Data de contratação"
+        tests:
+          - not_null
+      - name: salaried_flag
+        description: "Funcionário assalariado"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: current_flag
+        description: "Funcionário atual"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]

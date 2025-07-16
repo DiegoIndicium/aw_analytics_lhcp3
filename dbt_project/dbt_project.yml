@@ -21,20 +21,42 @@ models:
     staging:
       +materialized: view
       +schema: staging
+      +docs:
+        show: true
+      sales:
+        +materialized: view
+        +schema: staging
+      customers:
+        +materialized: view
+        +schema: staging
+      employees:
+        +materialized: view
+        +schema: staging
     intermediate:
       +materialized: view
       +schema: intermediate
+      +docs:
+        show: true
     marts:
       +materialized: table
       +schema: marts
+      +docs:
+        show: true
       dimensions:
         +materialized: table
         +schema: dimensions
-      # Convenções de nomenclatura
-      # stg_ = staging models
-      # intermediate_ = intermediate models  
-      # fact_ = fact tables mart
-      # dim_ = dimension tables mart
+        +docs:
+          show: true
+      facts:
+        +materialized: table
+        +schema: facts
+        +docs:
+          show: true
+      # Convenções de nomenclatura dbt
+      # stg_ = staging models (dados limpos e padronizados)
+      # int_ = intermediate models (transformações e agregações)
+      # dim_ = dimension tables (dimensões do data warehouse)
+      # fact_ = fact tables (fatos e métricas transacionais)
 
 vars:
   raw_schema: "ted_dev.dev_diego_brito"

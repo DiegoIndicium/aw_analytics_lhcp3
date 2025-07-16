@@ -1,0 +1,134 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Dimensão de clientes com segmentação RFM completa"
+    columns:
+      - name: customer_sk
+        description: "Chave surrogada para o cliente"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - unique
+          - not_null
+      - name: account_number
+        description: "Número da conta do cliente"
+        tests:
+          - not_null
+      - name: customer_type
+        description: "Tipo do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Individual', 'Store']
+      - name: total_orders
+        description: "Total de pedidos do cliente"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: total_revenue
+        description: "Receita total do cliente"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: avg_order_value
+        description: "Valor médio do pedido"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: customer_value_segment
+        description: "Segmento de valor do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Premium', 'Standard', 'Low Value', 'No Purchase']
+      - name: rfm_segment
+        description: "Segmento RFM do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Champions', 'Loyal Customers', 'Potential Loyalists', 'New Customers', 'At Risk', 'Cannot Lose Them', 'Hibernating']
+      - name: cancellation_rate
+        description: "Taxa de cancelamento"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND cancellation_rate <= 1"
+      - name: fulfillment_rate
+        description: "Taxa de cumprimento"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND fulfillment_rate <= 1"
+
+  - name: dim_products
+    description: "Dimensão de produtos com hierarquia e categorização"
+    columns:
+      - name: product_sk
+        description: "Chave surrogada para o produto"
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: "ID do produto"
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Nome do produto"
+        tests:
+          - not_null
+      - name: product_number
+        description: "Número do produto"
+        tests:
+          - not_null
+      - name: category_name
+        description: "Nome da categoria"
+        tests:
+          - not_null
+      - name: subcategory_name
+        description: "Nome da subcategoria"
+        tests:
+          - not_null
+      - name: list_price
+        description: "Preço de lista"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: standard_cost
+        description: "Custo padrão"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: profit_margin
+        description: "Margem de lucro"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: product_status
+        description: "Status do produto"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Active', 'Discontinued', 'End of Sales', 'Unknown']
+      - name: price_tier
+        description: "Categoria de preço"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Premium', 'Standard', 'Budget', 'Free']
+      - name: product_type
+        description: "Tipo de produto"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Manufactured', 'Purchased']
