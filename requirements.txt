@@ -1,8 +1,23 @@
-dbt-core==1.7.0
-dbt-databricks==1.7.0
-pandas==2.0.3
-requests==2.31.0
-pytest==7.4.0
-black==23.7.0
-flake8==6.0.0
-databricks-cli==0.17.8
+# Astro Runtime base packages
+apache-airflow==2.7.3
+
+# dbt dependencies
+dbt-databricks==1.6.0
+astronomer-cosmos==1.2.5
+dbt-utils>=1.1.0
+
+# Additional data engineering packages
+pandas>=2.0.0
+numpy>=1.24.0
+requests>=2.31.0
+
+# Development and debugging
+ipython>=8.0.0
+
+# Airflow providers
+apache-airflow-providers-databricks>=4.0.0
+apache-airflow-providers-email>=1.0.0
+
+# Monitoring and observability
+great-expectations>=0.17.0
+sentry-sdk>=1.32.0

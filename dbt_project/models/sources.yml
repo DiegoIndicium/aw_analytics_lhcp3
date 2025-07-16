@@ -1,0 +1,92 @@
+version: 2
+
+sources:
+  - name: raw_adventureworks
+    description: "Dados brutos do Adventure Works"
+    schema: dev_diego_brito
+    tables:
+      - name: raw_api_salesorderdetail
+        description: "Detalhes dos pedidos de vendas"
+        columns:
+          - name: SalesOrderID
+            description: "ID do pedido de vendas"
+            tests:
+              - not_null
+          - name: ProductID
+            description: "ID do produto"
+            tests:
+              - not_null
+          - name: SalesOrderDetailID
+            description: "ID do detalhe do pedido"
+            tests:
+              - not_null
+              
+      - name: raw_api_salesorderheader
+        description: "Cabeçalho dos pedidos de vendas"
+        columns:
+          - name: SalesOrderID
+            description: "ID do pedido de vendas"
+            tests:
+              - not_null
+              - unique
+              
+      - name: raw_db_sales_customer
+        description: "Dados de clientes"
+        columns:
+          - name: CustomerID
+            description: "ID do cliente"
+            tests:
+              - not_null
+              - unique
+              
+      - name: raw_db_humanresources_employee
+        description: "Dados de funcionários"
+        columns:
+          - name: BusinessEntityID
+            description: "ID da entidade de negócio"
+            tests:
+              - not_null
+              - unique
+
+      - name: raw_db_production_product
+        description: "Dados de produtos do banco de dados"
+        columns:
+          - name: ProductID
+            description: "ID do produto"
+            tests:
+              - not_null
+              - unique
+          - name: Name
+            description: "Nome do produto"
+            tests:
+              - not_null
+
+      - name: raw_db_production_productcategory
+        description: "Dados de categorias de produtos"
+        columns:
+          - name: ProductCategoryID
+            description: "ID da categoria"
+            tests:
+              - not_null
+              - unique
+          - name: Name
+            description: "Nome da categoria"
+            tests:
+              - not_null
+
+      - name: raw_db_production_productsubcategory
+        description: "Dados de subcategorias de produtos"
+        columns:
+          - name: ProductSubcategoryID
+            description: "ID da subcategoria"
+            tests:
+              - not_null
+              - unique
+          - name: ProductCategoryID
+            description: "ID da categoria pai"
+            tests:
+              - not_null
+          - name: Name
+            description: "Nome da subcategoria"
+            tests:
+              - not_null
