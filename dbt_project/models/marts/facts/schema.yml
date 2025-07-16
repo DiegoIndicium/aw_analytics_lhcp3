@@ -1,0 +1,166 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: "Fato de vendas com todas as métricas transacionais"
+    columns:
+      - name: orderdetail_sk
+        description: "Chave surrogada para o detalhe do pedido"
+        tests:
+          - unique
+          - not_null
+      - name: sales_order_id
+        description: "ID do pedido de venda"
+        tests:
+          - not_null
+      - name: sales_order_detail_id
+        description: "ID do item do pedido"
+        tests:
+          - not_null
+      - name: product_id
+        description: "ID do produto"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Data do pedido"
+        tests:
+          - not_null
+      - name: order_quantity
+        description: "Quantidade pedida"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: unit_price
+        description: "Preço unitário"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: net_amount
+        description: "Valor líquido"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: estimated_profit
+        description: "Lucro estimado"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: on_time_delivery
+        description: "Entrega no prazo"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: has_discount
+        description: "Tem desconto"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: is_shipped
+        description: "Foi enviado"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: is_cancelled
+        description: "Foi cancelado"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+
+  - name: fact_sales_summary
+    description: "Fato de vendas sumarizado por dia/cliente/território"
+    columns:
+      - name: sales_summary_sk
+        description: "Chave surrogada para o resumo"
+        tests:
+          - unique
+          - not_null
+      - name: order_date
+        description: "Data do pedido"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - not_null
+      - name: territory_id
+        description: "ID do território"
+        tests:
+          - not_null
+      - name: sales_channel
+        description: "Canal de vendas"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Online', 'Sales Rep']
+      - name: total_orders
+        description: "Total de pedidos"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_line_items
+        description: "Total de itens"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_quantity
+        description: "Quantidade total"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_net_revenue
+        description: "Receita líquida total"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_estimated_profit
+        description: "Lucro estimado total"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: profit_margin_rate
+        description: "Taxa de margem de lucro"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND profit_margin_rate <= 1"
+      - name: discount_rate
+        description: "Taxa de desconto"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND discount_rate <= 1"
+      - name: on_time_delivery_rate
+        description: "Taxa de entrega no prazo"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND on_time_delivery_rate <= 1"
+      - name: fulfillment_rate
+        description: "Taxa de cumprimento"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND fulfillment_rate <= 1"
+      - name: cancellation_rate
+        description: "Taxa de cancelamento"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND cancellation_rate <= 1"

@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Dados de clientes com transformações básicas"
+    columns:
+      - name: customer_sk
+        description: "Chave surrogada para o cliente"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - unique
+          - not_null
+      - name: account_number
+        description: "Número da conta do cliente"
+        tests:
+          - not_null
+      - name: customer_type
+        description: "Tipo do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Individual', 'Store']
+      - name: business_segment
+        description: "Segmento de negócio"
+        tests:
+          - not_null
+      - name: customer_status
+        description: "Status do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Active', 'Inactive']
+      - name: territory_id
+        description: "ID do território"
+        tests:
+          - not_null

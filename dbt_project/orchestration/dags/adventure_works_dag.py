@@ -1,0 +1,176 @@
+"""
+DAG do Pipeline Analytics Adventure Works
+
+Esta DAG orquestra o pipeline completo de analytics Adventure Works:
+1. Verificações de qualidade de dados
+2. Execução da camada staging 
+3. Execução da camada intermediate
+4. Execução da camada marts
+5. Testes e validação
+
+Executa diariamente às 6:00 AM UTC
+"""
+
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
+from airflow.operators.email import EmailOperator
+from airflow.models import Variable
+import logging
+
+# Argumentos padrão da DAG
+default_args = {
+    'owner': 'diego',
+    'depends_on_past': False,
+    'start_date': datetime(2024, 1, 1),
+    'email': ['diego@adventureworks.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+    'catchup': False,
+}
+
+# Criar instância da DAG
+dag = DAG(
+    'pipeline_analytics_adventure_works',
+    default_args=default_args,
+    description='Pipeline Analytics Adventure Works com dbt',
+    schedule_interval='0 6 * * *',  # Diariamente às 6:00 AM UTC
+    max_active_runs=1,
+    tags=['adventure-works', 'analytics', 'dbt', 'data-warehouse'],
+)
+
+# Definir diretório do projeto dbt
+DIRETORIO_PROJETO_DBT = '/opt/airflow/dbt_project'
+
+def log_inicio_pipeline():
+    """Log do início do pipeline"""
+    logging.info("Iniciando Pipeline Analytics Adventure Works")
+    logging.info(f"Data de Execução: {datetime.now()}")
+
+def log_fim_pipeline():
+    """Log da conclusão do pipeline"""
+    logging.info("Pipeline Analytics Adventure Works concluído com sucesso")
+
+# Definições das tarefas
+iniciar_pipeline = PythonOperator(
+    task_id='iniciar_pipeline',
+    python_callable=log_inicio_pipeline,
+    dag=dag,
+)
+
+# Limpar ambiente dbt
+limpar_dbt = BashOperator(
+    task_id='limpar_ambiente_dbt',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt clean',
+    dag=dag,
+)
+
+# Instalar dependências dbt
+instalar_dependencias = BashOperator(
+    task_id='instalar_dependencias_dbt',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt deps',
+    dag=dag,
+)
+
+# Execução da camada staging
+executar_modelos_staging = BashOperator(
+    task_id='executar_modelos_staging',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt run --select staging',
+    dag=dag,
+)
+
+# Testar modelos staging
+testar_modelos_staging = BashOperator(
+    task_id='testar_modelos_staging',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt test --select staging',
+    dag=dag,
+)
+
+# Execução da camada intermediate
+executar_modelos_intermediate = BashOperator(
+    task_id='executar_modelos_intermediate',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt run --select intermediate',
+    dag=dag,
+)
+
+# Testar modelos intermediate
+testar_modelos_intermediate = BashOperator(
+    task_id='testar_modelos_intermediate',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt test --select intermediate',
+    dag=dag,
+)
+
+# Execução da camada marts
+executar_modelos_marts = BashOperator(
+    task_id='executar_modelos_marts',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt run --select marts',
+    dag=dag,
+)
+
+# Testar modelos marts
+testar_modelos_marts = BashOperator(
+    task_id='testar_modelos_marts',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt test --select marts',
+    dag=dag,
+)
+
+# Executar todos os testes singulares
+executar_testes_singulares = BashOperator(
+    task_id='executar_testes_singulares',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt test --select test_type:singular',
+    dag=dag,
+)
+
+# Gerar documentação dbt
+gerar_documentacao = BashOperator(
+    task_id='gerar_documentacao_dbt',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt docs generate',
+    dag=dag,
+)
+
+# Validação final - executar todos os testes
+validacao_final = BashOperator(
+    task_id='validacao_final',
+    bash_command=f'cd {DIRETORIO_PROJETO_DBT} && dbt test',
+    dag=dag,
+)
+
+# Log de conclusão
+finalizar_pipeline = PythonOperator(
+    task_id='finalizar_pipeline',
+    python_callable=log_fim_pipeline,
+    dag=dag,
+)
+
+# Notificação de sucesso
+notificacao_sucesso = EmailOperator(
+    task_id='notificacao_sucesso',
+    to=['diego@adventureworks.com'],
+    subject='Pipeline Adventure Works - SUCESSO',
+    html_content="""
+    <h3>Pipeline Analytics Adventure Works Concluído com Sucesso</h3>
+    <p><strong>Data de Execução:</strong> {{ ds }}</p>
+    <p><strong>Tarefas Concluídas:</strong></p>
+    <ul>
+        <li>Modelos staging executados e testados</li>
+        <li>Modelos intermediate executados e testados</li>
+        <li>Modelos marts executados e testados</li>
+        <li>Todos os testes de qualidade passaram</li>
+        <li>Documentação gerada</li>
+    </ul>
+    <p>Data warehouse está pronto para consumo de negócio.</p>
+    """,
+    dag=dag,
+)
+
+# Definir dependências das tarefas
+iniciar_pipeline >> limpar_dbt >> instalar_dependencias
+instalar_dependencias >> executar_modelos_staging >> testar_modelos_staging
+testar_modelos_staging >> executar_modelos_intermediate >> testar_modelos_intermediate
+testar_modelos_intermediate >> executar_modelos_marts >> testar_modelos_marts
+testar_modelos_marts >> executar_testes_singulares >> gerar_documentacao
+gerar_documentacao >> validacao_final >> finalizar_pipeline
+finalizar_pipeline >> notificacao_sucesso

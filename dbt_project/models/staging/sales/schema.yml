@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: stg_sales_orderdetail
+    description: "Dados de detalhamento de pedidos com transformações de negócio"
+    columns:
+      - name: orderdetail_sk
+        description: "Chave surrogada para o detalhe do pedido"
+        tests:
+          - unique
+          - not_null
+      - name: sales_order_id
+        description: "ID do pedido de venda"
+        tests:
+          - not_null
+      - name: sales_order_detail_id
+        description: "ID do item do pedido"
+        tests:
+          - not_null
+      - name: product_id
+        description: "ID do produto"
+        tests:
+          - not_null
+      - name: order_quantity
+        description: "Quantidade pedida"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: unit_price
+        description: "Preço unitário"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: unit_price_discount
+        description: "Desconto unitário"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND unit_price_discount <= 1"
+      - name: net_amount
+        description: "Valor líquido após desconto"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: discount_tier
+        description: "Categoria de desconto"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High Discount', 'Medium Discount', 'Low Discount', 'No Discount']
+      - name: quantity_category
+        description: "Categoria de quantidade"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Bulk Order', 'Medium Order', 'Small Order']
+
+  - name: stg_sales_orderheader
+    description: "Dados de cabeçalho de pedidos com transformações de negócio"
+    columns:
+      - name: sales_order_sk
+        description: "Chave surrogada para o pedido"
+        tests:
+          - unique
+          - not_null
+      - name: sales_order_id
+        description: "ID do pedido de venda"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Data do pedido"
+        tests:
+          - not_null
+      - name: due_date
+        description: "Data de vencimento"
+        tests:
+          - not_null
+      - name: total_due
+        description: "Valor total devido"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: order_status_desc
+        description: "Status do pedido"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['In Process', 'Approved', 'Backordered', 'Rejected', 'Shipped', 'Cancelled']
+      - name: order_value_tier
+        description: "Categoria de valor do pedido"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High Value', 'Medium Value', 'Low Value', 'Micro Value']
+      - name: sales_channel
+        description: "Canal de vendas"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Online', 'Sales Rep']
