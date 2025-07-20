@@ -1,150 +1,205 @@
-# Changelog
+# Histórico de Mudanças - Adventure Works Analytics
 
-All notable changes to this project will be documented in this file.
+## Sobre este Documento
+Este arquivo documenta todas as mudanças significativas do projeto Adventure Works Analytics, seguindo as práticas de [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
+---
 
 ## [2.0.0] - 2025-07-10
 
-### 🎯 Major Release: Advanced Analytics Dimensions
+### Resumo da Versão
+Versão principal com foco em dimensões analíticas avançadas e melhorias de infraestrutura.
 
-#### ✨ Added
-- **5 New Analytical Dimensions** for comprehensive business intelligence:
-  - `dim_customers_enhanced` - Customer Lifetime Value analysis with VIP/Premium/Regular/Basic segmentation
-  - `dim_products_performance` - Product lifecycle analysis (Growth/Maturity/Decline/Discontinued)
-  - `dim_territories_performance` - Territory ROI analysis with efficiency rankings
-  - `dim_channels_performance` - Sales channel performance (Online/Reseller) with value segments
-  - `dim_product_associations` - Market basket analysis with lift, confidence, and support metrics
+### Novas Funcionalidades
 
-#### 🧪 Testing & Quality
-- **45+ Automated Tests** covering all analytical dimensions
-- **3 Custom Business Tests** for data quality validation:
-  - `assert_positive_clv` - Validates positive customer lifetime values
-  - `assert_valid_lifecycle_stages` - Ensures valid product lifecycle stages
-  - `assert_valid_lift_values` - Validates market basket lift values
-- **100% Test Coverage** on all new dimensions
+#### Dimensões Analíticas
+- **dim_customers_enhanced**: Análise de Customer Lifetime Value
+  - Segmentação VIP/Premium/Regular/Básico
+  - Métricas de valor do cliente
+  - Análise de comportamento de compra
 
-#### 🏗️ Infrastructure
-- **Complete GitHub Repository Structure** with GitFlow workflow
-- **CI/CD Pipeline** with GitHub Actions:
-  - Automated dbt testing on every PR
-  - Multi-environment deployment (dev → staging → production)
-  - Security scanning and code quality checks
-  - Automated documentation generation
-- **Comprehensive Documentation**:
-  - Interactive dbt docs with data lineage
-  - Contribution guidelines and development setup
-  - Architecture documentation with business use cases
+- **dim_products_performance**: Análise de ciclo de vida do produto
+  - Classificação em Crescimento/Maturidade/Declínio/Descontinuado
+  - Métricas de performance por produto
+  - Indicadores de rentabilidade
 
-#### 🔧 Technical Improvements
-- **Enhanced fact_sales_transactions** with `order_quantity` column
-- **Databricks Integration** fully configured with proper error handling
-- **Date Function Compatibility** for Spark SQL (ADD_MONTHS instead of DATE_SUB)
-- **Column Name Standardization** across all models
+- **dim_territories_performance**: Análise de ROI territorial
+  - Rankings de eficiência por território
+  - Métricas de performance regional
+  - Comparativos de mercado
 
-#### 📊 Business Intelligence
-- **Customer Analytics**: CLV segmentation, churn analysis, marketing targeting
-- **Product Intelligence**: Lifecycle tracking, ABC analysis, demand forecasting
-- **Sales Optimization**: Territory ROI, channel effectiveness, cross-selling opportunities
-- **Operations Intelligence**: Real-time dashboards, data quality monitoring
+- **dim_channels_performance**: Performance de canais de venda
+  - Análise Online vs Revenda
+  - Segmentação por valor
+  - Eficiência de cada canal
 
-### 🔄 Changed
-- **Updated dbt_project.yml** with proper materialization strategies
-- **Enhanced schema.yml** with comprehensive model and column documentation
-- **Improved SQL performance** with optimized joins and aggregations
-- **Standardized naming conventions** across all models
+- **dim_product_associations**: Análise de cesta de mercado
+  - Métricas de lift, confiança e suporte
+  - Recomendações de produtos
+  - Padrões de compra associada
 
-### 🐛 Fixed
-- **Databricks Connection Issues** with proper warehouse configuration
-- **Date Function Compatibility** for Spark SQL environment
-- **Column Reference Errors** in analytical dimensions
-- **Test Failures** related to data type mismatches
+#### Qualidade e Testes
+- **45+ testes automatizados** implementados
+- **3 testes customizados de negócio**:
+  - `assert_positive_clv`: Validação de valores CLV positivos
+  - `assert_valid_lifecycle_stages`: Verificação de estágios válidos
+  - `assert_valid_lift_values`: Validação de valores de lift
+- **100% de cobertura** nas novas dimensões
 
-### 📚 Documentation
-- **README.md** completely rewritten with professional structure
-- **Contributing Guidelines** with detailed development workflow
-- **Architecture Documentation** with Mermaid diagrams
-- **API Documentation** for all models and dimensions
+#### Infraestrutura e CI/CD
+- **Pipeline completo GitHub Actions**:
+  - Testes automatizados em cada PR
+  - Deploy multi-ambiente (dev → staging → produção)
+  - Verificações de segurança
+  - Geração automática de documentação
+
+- **Integração Databricks aprimorada**:
+  - Configuração otimizada de warehouse
+  - Tratamento robusto de erros
+  - Compatibilidade Spark SQL
+
+### Melhorias Técnicas
+
+#### Performance
+- **Otimização de consultas SQL**
+- **Joins e agregações melhoradas**
+- **Tempo de execução mantido em ~1 minuto**
+
+#### Padronização
+- **Convenções de nomenclatura uniformes**
+- **Estrutura de código consistente**
+- **Documentação padronizada**
+
+#### Compatibilidade
+- **Funções de data adequadas para Spark SQL**
+- **Uso de ADD_MONTHS ao invés de DATE_SUB**
+- **Tipos de dados otimizados**
+
+### Correções de Bugs
+- **Problemas de conexão Databricks** resolvidos
+- **Erros de referência de coluna** corrigidos
+- **Falhas de teste por incompatibilidade** solucionadas
+- **Issues de performance** otimizadas
+
+### Documentação Atualizada
+- **README.md** reescrito com estrutura profissional
+- **Diretrizes de contribuição** detalhadas
+- **Documentação de arquitetura** com diagramas
+- **Documentação interativa dbt** com linhagem
+
+---
 
 ## [1.0.0] - 2025-07-07
 
-### 🎯 Initial Release: Adventure Works Analytics Platform
+### Resumo da Versão
+Versão inicial da plataforma Adventure Works Analytics com arquitetura medallion completa.
 
-#### ✨ Added
-- **Complete dbt Project Structure** with medallion architecture:
-  - **Bronze Layer (Staging)**: Raw data cleaning and standardization
-  - **Silver Layer (Intermediate)**: Business logic and data enrichment
-  - **Gold Layer (Marts)**: Analytics-ready facts and dimensions
+### Funcionalidades Principais
 
-#### 📊 Core Data Models
-- **Fact Tables**:
-  - `fact_sales_transactions` - Transaction-level sales data
-  - `fact_sales_monthly_agg` - Monthly sales aggregations
-  - `fact_territorial_performance` - Quarterly territorial performance
+#### Arquitetura de Dados
+- **Camada Bronze (Staging)**:
+  - Limpeza de dados brutos
+  - Padronização de formatos
+  - Validações iniciais
 
-- **Core Dimensions**:
-  - `dim_customer` - Customer master data with demographics
-  - `dim_product` - Product catalog with categories and pricing
-  - `dim_date` - Date dimension with fiscal periods
+- **Camada Silver (Intermediate)**:
+  - Aplicação de lógica de negócio
+  - Enriquecimento de dados
+  - Transformações complexas
 
-#### 🏗️ Infrastructure Setup
-- **Airflow Orchestration** with Docker Compose setup
-- **Databricks Integration** for cloud data warehouse
-- **Delta Lake Storage** for reliable data management
-- **Environment Configuration** for dev/staging/production
+- **Camada Gold (Marts)**:
+  - Fatos e dimensões finais
+  - Dados prontos para consumo
+  - Otimizados para analytics
 
-#### 📋 Data Sources
-- **Adventure Works DW**: Main data warehouse tables
-- **Adventure Works API**: Recent/validation data from API
-- **Comprehensive Sources**: Sales, customers, products, territories
+#### Modelos de Dados
 
-#### 🧪 Initial Testing
-- **Schema Tests** for data quality validation
-- **Business Logic Tests** for calculation accuracy
-- **Data Freshness Tests** for pipeline monitoring
+##### Tabelas Fato
+- **fact_sales_transactions**: Transações de venda detalhadas
+- **fact_sales_monthly_agg**: Agregações mensais de vendas
+- **fact_territorial_performance**: Performance territorial trimestral
 
-### 🔧 Technical Implementation
-- **dbt 1.6.14** with Databricks adapter
-- **Python 3.8+** virtual environment
-- **Docker & Docker Compose** for containerized services
-- **Git Version Control** with initial GitFlow setup
+##### Dimensões
+- **dim_customer**: Dados mestres de clientes com demografia
+- **dim_product**: Catálogo completo de produtos
+- **dim_date**: Dimensão temporal com períodos fiscais
 
-### 📚 Documentation
-- **Basic README** with setup instructions
-- **dbt Documentation** with model descriptions
-- **Architecture Overview** with technology stack
+#### Infraestrutura
 
----
+##### Orquestração
+- **Apache Airflow** configurado com Docker Compose
+- **DAGs** para execução automatizada
+- **Monitoramento** de pipeline
 
-## 🏷️ Version Tags
+##### Armazenamento
+- **Databricks** como data warehouse principal
+- **Delta Lake** para confiabilidade de dados
+- **Integração** com fontes múltiplas
 
-- **v2.0.0**: Advanced Analytics Dimensions Release
-- **v1.0.0**: Initial Adventure Works Analytics Platform
+##### Ambientes
+- **Desenvolvimento** local com Docker
+- **Staging** para testes
+- **Produção** no Databricks
 
-## 🤝 Contributors
+#### Fontes de Dados
+- **Adventure Works DW**: Sistema principal
+- **Adventure Works API**: Dados em tempo real
+- **Cobertura completa**: Vendas, clientes, produtos, territórios
 
-- **Diego Brito** - Lead Data Engineer - [@DiegoIndicium](https://github.com/DiegoIndicium)
-- **Indicium Data Team** - Architecture & Development
+### Configuração Técnica
 
-## 📈 Release Statistics
+#### Stack Tecnológico
+- **dbt 1.6.14** com adapter Databricks
+- **Python 3.8+** em ambiente virtual
+- **Docker & Docker Compose** para containerização
+- **Git** com workflow GitFlow
 
-### v2.0.0 Metrics
-- **5 new analytical dimensions** created
-- **45+ automated tests** implemented
-- **100% test success rate** achieved
-- **~1 minute pipeline runtime** maintained
-- **6 GitHub Action workflows** configured
-
-### v1.0.0 Baseline
-- **2 fact tables** established
-- **3 core dimensions** created
-- **15+ staging models** implemented
-- **Airflow orchestration** configured
-- **Databricks integration** completed
+#### Testes Implementados
+- **Testes de schema** para validação estrutural
+- **Testes de lógica de negócio** para precisão
+- **Testes de atualização** para monitoramento
 
 ---
 
-*For detailed release notes and migration guides, see the [GitHub Releases](https://github.com/DiegoIndicium/adventure-works-analytics/releases) page.*
+## Estatísticas do Projeto
+
+### Versão 2.0.0
+| Métrica | Valor |
+|---------|-------|
+| Dimensões analíticas | 5 novas |
+| Testes automatizados | 45+ |
+| Taxa de sucesso | 100% |
+| Tempo de execução | ~1 minuto |
+| Workflows CI/CD | 6 |
+
+### Versão 1.0.0
+| Métrica | Valor |
+|---------|-------|
+| Tabelas fato | 2 |
+| Dimensões principais | 3 |
+| Modelos staging | 15+ |
+| Integração | Databricks + Airflow |
+
+---
+
+## Informações do Projeto
+
+### Contribuidor Principal
+**Diego Brito** - Engenheiro de Dados Lead  
+GitHub: [@DiegoIndicium](https://github.com/DiegoIndicium)
+
+### Repositório
+**URL**: [github.com/DiegoIndicium/aw_analytics_lhcp3](https://github.com/DiegoIndicium/aw_analytics_lhcp3)  
+**Tipo**: Repositório privado  
+**Licença**: Proprietária
+
+### Versões Disponíveis
+- **v2.0.0**: Release Dimensões Analíticas Avançadas
+- **v1.0.0**: Release Inicial da Plataforma
+
+---
+
+## Referências
+- [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+- [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+- [GitHub Releases](https://github.com/DiegoIndicium/aw_analytics_lhcp3/releases)

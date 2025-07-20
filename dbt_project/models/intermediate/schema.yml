@@ -1,0 +1,116 @@
+version: 2
+
+models:
+  - name: int_sales_order_enriched
+    description: "Pedidos enriquecidos com informações adicionais"
+    columns:
+      - name: sales_order_sk
+        description: "Chave surrogada para o pedido"
+        tests:
+          - unique
+          - not_null
+      - name: sales_order_id
+        description: "ID do pedido de venda"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Data do pedido"
+        tests:
+          - not_null
+      - name: total_items
+        description: "Total de itens no pedido"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_quantity
+        description: "Quantidade total de produtos"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_gross_amount
+        description: "Valor bruto total"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: total_discount_amount
+        description: "Valor total de desconto"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: total_net_amount
+        description: "Valor líquido total"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: avg_discount_rate
+        description: "Taxa média de desconto"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND avg_discount_rate <= 1"
+
+  - name: int_customer_enriched
+    description: "Clientes enriquecidos com métricas de comportamento"
+    columns:
+      - name: customer_sk
+        description: "Chave surrogada para o cliente"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "ID do cliente"
+        tests:
+          - unique
+          - not_null
+      - name: total_orders
+        description: "Total de pedidos do cliente"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: total_revenue
+        description: "Receita total do cliente"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: avg_order_value
+        description: "Valor médio do pedido"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: customer_value_segment
+        description: "Segmento de valor do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VIP', 'Premium', 'Standard', 'Low Value', 'No Purchase']
+      - name: purchase_frequency_segment
+        description: "Segmento de frequência de compra"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High Frequency', 'Medium Frequency', 'Low Frequency', 'One Time', 'No Purchase']
+      - name: recency_segment
+        description: "Segmento de recência"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Recent', 'Moderate', 'Dormant', 'No Purchase']
+      - name: preferred_channel
+        description: "Canal preferido do cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Online', 'Sales Rep', 'Mixed', 'Unknown']

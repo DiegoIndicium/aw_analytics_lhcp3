@@ -1,10 +1,20 @@
-# Adventure Works Analytics - Orchestration
+"[200~# Adventure Works Analytics - Lighthouse Checkpoint 3
 
-## Orquestração completa implementada:
-- Pipeline Airflow com DAGs configuradas
-- Workflows Databricks integrados
-- Containerização Docker
-- Agendamento diário automático
-- Tratamento de erros e retentativas
+## Autor
+**Diego Brito**  
+Email: diego.brito@indicium.tech
 
-Parte da Feature 3 - Orchestration
+## Visão Geral
+Pipeline de análise de dados da Adventure Works com dbt, Airflow e Databricks.
+
+## Tecnologias
+- dbt para transformação de dados
+- Apache Airflow para orquestração  
+- Databricks como plataforma
+
+## Estrutura
+- dbt_project/: Modelos de dados
+- dags/: Orquestração Airflow
+- docs/: Documentação
+
+Desenvolvido por Diego Brito para Lighthouse Checkpoint 3.
