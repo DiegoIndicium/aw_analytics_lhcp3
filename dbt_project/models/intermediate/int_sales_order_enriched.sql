@@ -2,11 +2,11 @@
 {{ config(materialized='view') }}
 
 WITH order_details AS (
-    SELECT * FROM {{ ref('stg_sales_orderdetail') }}
+    SELECT * FROM {{ ref('stg_sales__orderdetail') }}
 ),
 
 order_headers AS (
-    SELECT * FROM {{ ref('stg_sales_orderheader') }}
+    SELECT * FROM {{ ref('stg_sales__orderheader') }}
 ),
 
 order_summary AS (

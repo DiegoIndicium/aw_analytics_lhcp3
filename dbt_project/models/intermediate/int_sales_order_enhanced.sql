@@ -10,7 +10,7 @@ order_headers AS (
 ),
 
 customers AS (
-    SELECT * FROM {{ ref('stg_customers') }}
+    SELECT * FROM {{ ref('stg_sales__customer_individual') }}
 ),
 
 order_aggregation AS (
