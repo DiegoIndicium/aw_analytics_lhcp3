@@ -2,7 +2,7 @@
 {{ config(materialized='view') }}
 
 WITH customers AS (
-    SELECT * FROM {{ ref('stg_customers') }}
+    SELECT * FROM {{ ref('stg_sales__customer_individual') }}
 ),
 
 order_summary AS (
@@ -31,7 +31,7 @@ order_summary AS (
         SUM(CASE WHEN order_value_tier = 'Low Value' THEN 1 ELSE 0 END) AS low_value_orders,
         SUM(CASE WHEN order_value_tier = 'Micro Value' THEN 1 ELSE 0 END) AS micro_value_orders
         
-    FROM {{ ref('stg_sales_orderheader') }}
+    FROM {{ ref('stg_sales__orderheader') }}
     GROUP BY customer_id
 ),
 

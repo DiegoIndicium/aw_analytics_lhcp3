@@ -1,7 +1,7 @@
 {{ config(materialized='view') }}
 
 WITH products AS (
-    SELECT * FROM {{ ref('stg_products__product') }}
+    SELECT * FROM {{ ref('stg_production__product') }}
 ),
 
 categories AS (

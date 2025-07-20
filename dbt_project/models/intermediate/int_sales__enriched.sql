@@ -18,7 +18,7 @@ WITH
   ),
 
   prod AS (
-    SELECT * FROM {{ ref('stg_products__product') }}
+    SELECT * FROM {{ ref('stg_production__product') }}
   )
 
 SELECT
